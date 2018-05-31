@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.2</version>
-    <date>2018-05-30T14:01:10Z</date>
+    <date>2018-05-31T08:15:31Z</date>
     <groups>
         <group>
             <name>01 - Web site</name>
@@ -42,7 +42,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>vhosts.domains_autodiscovery</key>
-                    <delay>3600</delay>
+                    <delay>1800</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -75,8 +75,8 @@
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>vhosts.domain_data[{#DOMAIN},server_alias]</key>
-                            <delay>3600</delay>
+                            <key>vhosts.domain_data[{#CONFIG_FILE},server_alias]</key>
+                            <delay>43200</delay>
                             <history>10</history>
                             <trends>0</trends>
                             <status>1</status>
@@ -119,12 +119,12 @@
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>vhosts.domain_data[{#DOMAIN},ssl_active]</key>
-                            <delay>3600</delay>
+                            <key>vhosts.domain_data[{#CONFIG_FILE},ssl_active]</key>
+                            <delay>43200</delay>
                             <history>10</history>
-                            <trends>365</trends>
+                            <trends>0</trends>
                             <status>0</status>
-                            <value_type>3</value_type>
+                            <value_type>4</value_type>
                             <allowed_hosts/>
                             <units/>
                             <delta>0</delta>
@@ -139,7 +139,7 @@
                             <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>3</data_type>
+                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -153,9 +153,51 @@
                                     <name>HostingCondiviso</name>
                                 </application>
                             </applications>
-                            <valuemap>
-                                <name>YES|NO</name>
-                            </valuemap>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <application_prototypes/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Ente Certificatore SSL {#DOMAIN}</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>vhosts.domain_data[{#CONFIG_FILE},ssl_issuer]</key>
+                            <delay>43200</delay>
+                            <history>10</history>
+                            <trends>0</trends>
+                            <status>1</status>
+                            <value_type>4</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>numero di giorni di validità del certificato</description>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>HostingCondiviso</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
                             <logtimefmt/>
                             <application_prototypes/>
                         </item_prototype>
@@ -165,8 +207,8 @@
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>vhosts.domain_data[{#DOMAIN},ssl_until_days]</key>
-                            <delay>3600</delay>
+                            <key>vhosts.domain_data[{#CONFIG_FILE},ssl_until_days]</key>
+                            <delay>43200</delay>
                             <history>10</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -206,7 +248,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template App VHosts:vhosts.domain_data[{#DOMAIN},ssl_until_days].last()}&lt;2 and {Template App VHosts:vhosts.domain_data[{#DOMAIN},ssl_active].last()}=1</expression>
+                            <expression>{Template App VHosts:vhosts.domain_data[{#CONFIG_FILE},ssl_until_days].last()}&lt;2 and {Template App VHosts:vhosts.domain_data[{#CONFIG_FILE},ssl_active].last()}=1</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>Certificato {#DOMAIN} SSL scade domani</name>
@@ -222,7 +264,7 @@
                             <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template App VHosts:vhosts.domain_data[{#DOMAIN},ssl_active].last()}=1 and {Template App VHosts:vhosts.domain_data[{#DOMAIN},ssl_until_days].last()}&lt;30</expression>
+                            <expression>{Template App VHosts:vhosts.domain_data[{#CONFIG_FILE},ssl_active].last()}=1 and {Template App VHosts:vhosts.domain_data[{#CONFIG_FILE},ssl_until_days].last()}&lt;30</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>Certificato {#DOMAIN} SSL scade in 30 giorni</name>
@@ -253,19 +295,4 @@
             <screens/>
         </template>
     </templates>
-    <value_maps>
-        <value_map>
-            <name>YES|NO</name>
-            <mappings>
-                <mapping>
-                    <value>0</value>
-                    <newvalue>NO</newvalue>
-                </mapping>
-                <mapping>
-                    <value>1</value>
-                    <newvalue>YES</newvalue>
-                </mapping>
-            </mappings>
-        </value_map>
-    </value_maps>
 </zabbix_export>

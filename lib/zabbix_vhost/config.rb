@@ -65,7 +65,7 @@ module ZabbixVhost
     end
 
     def ssl_until_days
-      return nil unless @ssl_data
+      return 0 unless @ssl_data
       @ssl_data[:days_until]
     end
 
