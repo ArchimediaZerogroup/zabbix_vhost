@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    zabbix_vhost (0.1.0)
+    zabbix_vhost (0.6.2)
       thor
 
 GEM

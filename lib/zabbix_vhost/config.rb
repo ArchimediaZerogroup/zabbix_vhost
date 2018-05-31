@@ -19,10 +19,10 @@ module ZabbixVhost
       @config_content = File.read(@file_path)
       ## Controlliamo se siamo in apache
       if_apache do
-        @server_name = @config_content.match(/ServerName (?<server_name>.*)/)[:server_name]
+        @server_name = @config_content.match(/^\s*ServerName (?<server_name>.*)/)[:server_name]
 
-        if @config_content.match(/ServerAlias/)
-          @server_alias = @config_content.match(/ServerAlias (?<names>.*)/)[:names].split(" ")
+        if @config_content.match(/^\s*ServerAlias/)
+          @server_alias = @config_content.match(/^\s*ServerAlias (?<names>.*)/)[:names].split(" ")
         end
 
         @ssl_active = !@config_content.match(/443/).nil?
@@ -58,11 +58,7 @@ module ZabbixVhost
     end
 
 
-    def if_apache
-      if @config_content.match(/ServerName/)
-        yield
-      end
-    end
+
 
     def ssl_active
       @ssl_active ? 1 : 0
@@ -73,8 +69,19 @@ module ZabbixVhost
       @ssl_data[:days_until]
     end
 
+    def ssl_issuer
+      return nil unless @ssl_data
+      @ssl_data[:issuer]
+    end
+
 
     private
+
+    def if_apache
+      if @config_content.match(/^\s*ServerName/)
+        yield
+      end
+    end
 
     def read_ssl_data
 

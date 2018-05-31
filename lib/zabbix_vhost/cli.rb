@@ -6,6 +6,7 @@ module ZabbixVhost
 
 
     desc "autodiscover PATH", "Autodiscover Vhost in absolute path"
+
     def autodiscover(path)
 
 
@@ -13,10 +14,14 @@ module ZabbixVhost
 
 
       data = configurations.collect do |c|
-        {
-          "{#DOMAIN}" => c.server_name
-        }
-      end
+
+        unless c.server_name.nil?
+          {
+            "{#DOMAIN}" => c.server_name,
+            "{#CONFIG_FILE}" => c.file_path
+          }
+        end
+      end.compact
 
       print JSON.generate({data: data})
 
@@ -24,13 +29,19 @@ module ZabbixVhost
     end
 
 
-    desc "get_domain_data PATH DOMAIN FUNCTION", "Get a information from the Vhost configuration find in the PATH"
+    desc "get_domain_data CONFIG_FILE FUNCTION", "Get a information from the Vhost configuration of CONFIG_FILE"
 
-    def get_domain_data(path,domain,function)
+    def get_domain_data(config_file, function)
 
-      c = ZabbixVhost::Config.find_in_dir(path, domain)
+      c = ZabbixVhost::Config.new(config_file)
 
       print c.send(function)
+    end
+
+    desc "version", "Get version"
+
+    def version
+      puts ZabbixVhost::VERSION
     end
 
   end
